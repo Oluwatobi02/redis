@@ -11,7 +11,7 @@ def main():
 
     connection, _ = server_socket.accept()
     for _ in range(2):
-        print(connection.recv(1024).decode())
+        print(connection.recv(1024).decode('utf-8'))
         
         connection.sendall(b"+PONG\r\n")
 
