@@ -8,11 +8,10 @@ def main():
     # Uncomment this to pass the first stage
     
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
-    for _ in range(2):
-        connection, _ = server_socket.accept()
-        print(connection.recv(1024))
-        
-        connection.sendall(b"+PONG\r\n")
+
+    connection, _ = server_socket.accept()
+    connection.sendall(b"+PONG\r\n")
+    connection.sendall(b"+PONG\r\n")
 
 if __name__ == "__main__":
     main()
