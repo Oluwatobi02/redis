@@ -8,7 +8,7 @@ def main():
     # Uncomment this to pass the first stage
     
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
-    while True:
+    for _ in range(2):
         connection, _ = server_socket.accept()
         
         connection.sendall(b"+PONG\r\n")
