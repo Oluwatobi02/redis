@@ -1,24 +1,9 @@
 import socket  # noqa: F401
 import threading
-
-def parse_resp(data):
-    lines = data.split("\r\n")
-    result = []
-    idx = 0
-
-    while idx < len(lines):
-        line = lines[idx]
-        if line.startswith("*"):  # Array
-            array_length = int(line[1:])
-            result = []  # Initialize an array
-        elif line.startswith("$"):  # Bulk string
-            length = int(line[1:])  # Length of the string
-            idx += 1  # Move to the next line (actual string)
-            result.append(lines[idx][:length])
-        idx += 1
-
-    return result
-
+from app.validation import parsedata as parse
+from app.commands import Command
+from app.store.key_value_store import key_value_store
+kvs = key_value_store()
 
 def handle_connection(connection: socket.socket, address):
     while connection:
@@ -27,14 +12,27 @@ def handle_connection(connection: socket.socket, address):
             break
         try:
             message = data.decode("utf-8").strip('\r\n')
-            parts = parse_resp(message)
-            if parts[0] == "ECHO" and len(parts) > 1:
-                connection.sendall(f"+{parts[1]}\r\n".encode("utf-8"))
-            elif parts[0] == "PING" and len(parts) > 1:
-                connection.sendall(f"+{parts[1]}\r\n".encode("utf-8"))
-            else:
-                connection.sendall(b"+PONG\r\n")
-        except:
+            parts = parse.parse_resp(message)
+
+            if parts[0] == "PING":
+
+                if len(parts) > 1:
+                    connection.sendall(Command.ping(parts[1]))
+                else:
+                    connection.sendall(Command.ping())
+            elif parts[0] == "ECHO":
+                if len(parts) > 1:
+                    connection.sendall(Command.echo(parts[1]))
+                else:
+                    connection.sendall(Command.echo())
+            elif parts[0] == "SET":
+                if len(parts) > 2:
+                    connection.sendall(Command.set(parts[1], parts[2], kvs))
+            elif parts[0] == "GET":
+                if len(parts) > 1:
+                    connection.sendall(Command.get(parts[1], kvs))
+        except Exception as e:
+            print(f"{e}")
             connection.sendall(b"-ERR invalid encoding\r\n")
             continue
 def main():
