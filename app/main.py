@@ -28,7 +28,6 @@ def handle_connection(connection: socket.socket, address):
         try:
             message = data.decode("utf-8").strip('\r\n')
             parts = parse_resp(message)
-            print(parts)
             if parts[0] == "ECHO" and len(parts) > 1:
                 connection.sendall(f"+{parts[1]}\r\n".encode("utf-8"))
             elif parts[0] == "PING" and len(parts) > 1:
