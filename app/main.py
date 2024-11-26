@@ -11,9 +11,7 @@ def main():
 
     while True:
         connection, _ = server_socket.accept()
-        print(connection.recv(1024).decode('utf-8'))
-        
-        connection.sendall(b"+PONG\r\n")
-
+        while connection.recv(8000):
+            connection.send(b"+PONG\r\n")
 if __name__ == "__main__":
     main()
