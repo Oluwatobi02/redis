@@ -48,6 +48,10 @@ def main():
         thread = threading.Thread(target=handle_connection, args=(connection, address))
         thread.start()
 
+    while True:
+        connection, address = server_socket.accept()
+        thread = threading.Thread(target=handle_connection, args=(connection, address))
+        thread.start()
 
 if __name__ == "__main__":
     main()
