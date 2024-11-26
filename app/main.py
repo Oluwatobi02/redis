@@ -49,7 +49,7 @@ def main():
         connection, address = server_socket.accept()
         thread = threading.Thread(target=handle_connection, args=(connection, address))
         thread.start()
-        thread.join()
+
 
 if __name__ == "__main__":
     main()
