@@ -8,7 +8,7 @@ def handle_connection(connection: socket.socket, address):
             break
         try:
             message = data.decode("utf-8")
-            connection.sendall(b"+blueberry\r\n")
+            connection.sendall(b"+hey\r\n")
             print(f"Received: {message}")
         except UnicodeDecodeError:
             connection.sendall(b"-ERR invalid encoding\r\n")
