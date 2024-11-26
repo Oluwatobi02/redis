@@ -12,12 +12,12 @@ get_command = make_get()
 
 class Command:
     def ping(message=""):
-        if message:
+        if type(message) == str:
             return ping_command(message)
         return ping_command()
     
     def echo(message=""):
-        if message:
+        if type(message) == str:
             return echo_command(message)
         return echo_command()
     def set(key, value, store):
