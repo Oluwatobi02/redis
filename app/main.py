@@ -13,5 +13,6 @@ def main():
         connection, _ = server_socket.accept()
         while connection.recv(8000):
             connection.send(b"+PONG\r\n")
+            print("PONG")
 if __name__ == "__main__":
     main()
