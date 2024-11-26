@@ -31,7 +31,7 @@ def handle_connection(connection: socket.socket, address):
             print(parts)
             if parts[0] == "ECHO" and len(parts) > 1:
                 connection.sendall(f"+{parts[1]}\r\n".encode("utf-8"))
-            elif parts[0] == "PING" and len(parts) == 1:
+            elif parts[0] == "PING" and len(parts) > 1:
                 connection.sendall(f"+{parts[1]}\r\n".encode("utf-8"))
             else:
                 connection.sendall(b"+PONG\r\n")
