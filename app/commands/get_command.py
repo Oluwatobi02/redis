@@ -4,7 +4,7 @@ def make_get():
         is_object_valid = process_get(value_object)
         if is_object_valid:
             return f"+{value_object['value']}\r\n".encode("utf-8")
-        return f"+None\r\n".encode("utf-8")
+        return f"$-1\r\n".encode("utf-8")
     return get
 
 import time
