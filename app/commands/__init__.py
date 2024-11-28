@@ -20,8 +20,9 @@ class Command:
         if type(message) == str:
             return echo_command(message)
         return echo_command()
-    def set(key, value, store):
-        return set_command(key, value, store)
+    def set(*args, store):
+
+        return set_command(*args, store=store)
     
     def get(key, store):
-        return get_command(key, store)
+        return get_command(key, store=store)

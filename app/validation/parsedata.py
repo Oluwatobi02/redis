@@ -1,4 +1,4 @@
-def parse_resp(data):
+def parse_resp(data: str):
     lines = data.split("\r\n")
     result = []
     idx = 0
@@ -13,5 +13,5 @@ def parse_resp(data):
             idx += 1  # Move to the next line (actual string)
             result.append(lines[idx][:length])
         idx += 1
-
+    result[0] = result[0].upper()
     return tuple(result)

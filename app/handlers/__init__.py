@@ -10,9 +10,21 @@ handle_get = make_get_handler()
 
 
 
-command_handlers = {
+command_handlers: dict[dict] = {
+    "PRINT COMMANDS": {
     "PING": handle_ping,
     "ECHO": handle_echo,
-    "SET": handle_set,
-    "GET": handle_get,
+    },
+    'STORE COMMANDS': {
+        "SET": handle_set,
+        "GET": handle_get,
+    }
 }
+
+def handle(command: str):
+    if command in command_handlers['STORE COMMANDS']:
+        return command_handlers["STORE COMMANDS"][command], 'STORE COMMANDS'
+    elif command in command_handlers['PRINT COMMANDS']:
+        return command_handlers["PRINT COMMANDS"][command], 'PRINT COMMANDS'
+    return None, 'NONE'
+    

@@ -7,6 +7,11 @@ class KeyValueStore:
 
     def set(self, key: str, value: str) -> None:
         self.store[key] = value
+
+    def remove(self, key):
+        if key in self.store:
+            del self.store[key]
+        
     
 def make_key_value_store():
     def key_value_store(store: dict = {}):

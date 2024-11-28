@@ -1,9 +1,8 @@
 import socket
 import threading
 from app.validation import parsedata as parse
-from app.commands import Command
 from app.store.key_value_store import key_value_store
-from app.handlers import command_handlers
+from app.handlers import handle
 kvs = key_value_store()
 
 def handle_connection(connection: socket.socket, address):
@@ -15,11 +14,17 @@ def handle_connection(connection: socket.socket, address):
             message = data.decode("utf-8").strip('\r\n')
             parts = parse.parse_resp(message)
             command = parts[0]
-            handler = command_handlers[command]
-            if not handler:
+            handler, handler_type = handle(command)
+            if not handler or handler_type == 'NONE':
                 break
-            connection.sendall(handler(*parts[1:], kvs))
+            if handler_type == "STORE COMMANDS":
+                response = handler(*parts[1:],store= kvs)
+                print(response)
+            elif handler_type == "PRINT COMMANDS":
+                response = handler(*parts[1:])
             
+            connection.sendall(response)
+
         except Exception as e:
             print(f"{e}")
             connection.sendall(b"-ERR invalid encoding\r\n")
